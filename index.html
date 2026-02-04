@@ -8,9 +8,9 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
+            background: linear-gradient(135deg, #0a1628 0%, #0d1b2a 50%, #162231 100%);
             min-height: 100vh;
-            color: #fff;
+            color: #e2e8f0;
             padding: 15px;
         }
 
@@ -20,13 +20,14 @@
             margin-bottom: 15px;
         }
         .header h1 {
-            color: #f0b90b;
+            color: #00d4ff;
             font-size: 28px;
             margin-bottom: 3px;
-            text-shadow: 0 0 20px rgba(240, 185, 11, 0.3);
+            text-shadow: 0 0 25px rgba(0, 212, 255, 0.4);
+            letter-spacing: 1px;
         }
         .header p {
-            color: #666;
+            color: #64748b;
             font-size: 12px;
         }
 
@@ -39,26 +40,27 @@
             flex-wrap: wrap;
         }
         .top-stat {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 10px;
-            padding: 10px 25px;
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            border-radius: 12px;
+            padding: 12px 28px;
             text-align: center;
         }
         .top-stat-label {
-            color: #666;
+            color: #64748b;
             font-size: 11px;
             text-transform: uppercase;
             margin-bottom: 3px;
+            letter-spacing: 0.5px;
         }
         .top-stat-value {
             font-size: 18px;
             font-weight: bold;
             font-family: monospace;
         }
-        .top-stat-value.green { color: #2ecc71; }
+        .top-stat-value.green { color: #10b981; }
         .top-stat-sub {
-            color: #666;
+            color: #64748b;
             font-size: 11px;
         }
 
@@ -75,26 +77,30 @@
 
         /* Cards */
         .card {
-            background: rgba(255,255,255,0.08);
+            background: rgba(22, 34, 49, 0.8);
             border-radius: 16px;
             padding: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(0, 212, 255, 0.1);
             display: flex;
             flex-direction: column;
+            backdrop-filter: blur(10px);
+        }
+        .card:hover {
+            border-color: rgba(0, 212, 255, 0.25);
         }
         .card-title {
-            color: #f0b90b;
+            color: #00d4ff;
             font-size: 16px;
             font-weight: bold;
             margin-bottom: 15px;
             padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.15);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         .card-title span {
-            color: #666;
+            color: #64748b;
             font-size: 12px;
             font-weight: normal;
         }
@@ -106,25 +112,26 @@
         .input-group label {
             display: block;
             margin-bottom: 6px;
-            color: #888;
+            color: #94a3b8;
             font-size: 12px;
         }
         .input-group input {
             width: 100%;
             padding: 12px;
-            border: 1px solid rgba(255,255,255,0.15);
+            border: 1px solid rgba(0, 212, 255, 0.2);
             border-radius: 10px;
-            background: rgba(0,0,0,0.4);
-            color: #fff;
+            background: rgba(10, 22, 40, 0.8);
+            color: #e2e8f0;
             font-size: 13px;
             font-family: monospace;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
         }
         .input-group input:focus {
             outline: none;
-            border-color: #f0b90b;
+            border-color: #00d4ff;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.15);
         }
-        .input-group input::placeholder { color: #444; }
+        .input-group input::placeholder { color: #475569; }
 
         /* Stats */
         .stats-grid {
@@ -134,26 +141,28 @@
             margin-bottom: 15px;
         }
         .stat-box {
-            background: rgba(0,0,0,0.3);
+            background: rgba(10, 22, 40, 0.6);
             border-radius: 8px;
             padding: 10px;
             text-align: center;
+            border: 1px solid rgba(0, 212, 255, 0.08);
         }
         .stat-box.full { grid-column: 1 / -1; }
         .stat-label {
-            color: #666;
+            color: #64748b;
             font-size: 10px;
             text-transform: uppercase;
             margin-bottom: 4px;
+            letter-spacing: 0.5px;
         }
         .stat-value {
             font-weight: bold;
             font-family: monospace;
             font-size: 14px;
         }
-        .stat-value.gold { color: #ffd700; }
-        .stat-value.red { color: #e74c3c; }
-        .stat-value.green { color: #2ecc71; }
+        .stat-value.gold { color: #fbbf24; }
+        .stat-value.red { color: #ef4444; }
+        .stat-value.green { color: #10b981; }
         .stat-value.big { font-size: 20px; }
 
         /* Buttons */
@@ -170,27 +179,37 @@
             letter-spacing: 0.5px;
         }
         .btn-primary {
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: #fff;
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: #0a1628;
         }
-        .btn-primary:hover { background: linear-gradient(135deg, #5faee3, #3498db); }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #33ddff, #00d4ff);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
         .btn-gold {
-            background: linear-gradient(135deg, #f0b90b, #d4a00a);
-            color: #000;
+            background: linear-gradient(135deg, #fbbf24, #d97706);
+            color: #0a1628;
         }
-        .btn-gold:hover { background: linear-gradient(135deg, #ffcf2e, #f0b90b); }
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #fcd34d, #fbbf24);
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+        }
         .btn-battle {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            background: linear-gradient(135deg, #ef4444, #dc2626);
             color: #fff;
         }
-        .btn-battle:hover { background: linear-gradient(135deg, #ff6b5b, #e74c3c); }
+        .btn-battle:hover {
+            background: linear-gradient(135deg, #f87171, #ef4444);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+        }
         .btn-purple {
-            background: linear-gradient(135deg, #9b59b6, #8e44ad);
-            color: #fff;
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: #0a1628;
         }
         .btn:disabled {
-            opacity: 0.5;
+            opacity: 0.4;
             cursor: not-allowed;
+            box-shadow: none;
         }
         .btn.loading {
             position: relative;
@@ -223,26 +242,27 @@
             display: none;
         }
         .message.visible { display: block; }
-        .message.success { background: rgba(39, 174, 96, 0.2); color: #2ecc71; }
-        .message.error { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
-        .message.info { background: rgba(52, 152, 219, 0.2); color: #3498db; }
+        .message.success { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .message.error { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .message.info { background: rgba(0, 212, 255, 0.15); color: #00d4ff; border: 1px solid rgba(0, 212, 255, 0.3); }
 
         /* Battle Section */
         .battle-status {
-            background: rgba(0,0,0,0.3);
+            background: rgba(10, 22, 40, 0.6);
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 15px;
             text-align: center;
+            border: 1px solid rgba(0, 212, 255, 0.08);
         }
         .battle-status-text {
             font-size: 14px;
             margin-bottom: 5px;
         }
-        .battle-status-text.ready { color: #2ecc71; }
-        .battle-status-text.cooldown { color: #e74c3c; }
+        .battle-status-text.ready { color: #10b981; }
+        .battle-status-text.cooldown { color: #ef4444; }
         .battle-cooldown {
-            color: #888;
+            color: #64748b;
             font-size: 12px;
         }
         .battle-slider-container {
@@ -253,13 +273,13 @@
             justify-content: space-between;
             margin-bottom: 8px;
             font-size: 12px;
-            color: #888;
+            color: #64748b;
         }
         .battle-slider {
             width: 100%;
             height: 8px;
             border-radius: 4px;
-            background: rgba(0,0,0,0.4);
+            background: rgba(10, 22, 40, 0.8);
             outline: none;
             -webkit-appearance: none;
         }
@@ -268,9 +288,9 @@
             width: 24px;
             height: 24px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #f0b90b, #d4a00a);
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
             cursor: pointer;
-            box-shadow: 0 2px 10px rgba(240, 185, 11, 0.4);
+            box-shadow: 0 2px 15px rgba(0, 212, 255, 0.5);
         }
         .battle-chance {
             text-align: center;
@@ -279,11 +299,11 @@
         .battle-chance-value {
             font-size: 48px;
             font-weight: bold;
-            color: #f0b90b;
-            text-shadow: 0 0 30px rgba(240, 185, 11, 0.5);
+            color: #00d4ff;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
         }
         .battle-chance-label {
-            color: #888;
+            color: #64748b;
             font-size: 12px;
         }
         .battle-rewards {
@@ -293,16 +313,16 @@
             margin-bottom: 15px;
         }
         .battle-reward {
-            background: rgba(0,0,0,0.3);
+            background: rgba(10, 22, 40, 0.6);
             border-radius: 8px;
             padding: 12px;
             text-align: center;
         }
-        .battle-reward.win { border: 1px solid rgba(46, 204, 113, 0.3); }
-        .battle-reward.lose { border: 1px solid rgba(231, 76, 60, 0.3); }
+        .battle-reward.win { border: 1px solid rgba(16, 185, 129, 0.3); }
+        .battle-reward.lose { border: 1px solid rgba(239, 68, 68, 0.3); }
         .battle-reward-label {
             font-size: 10px;
-            color: #888;
+            color: #64748b;
             text-transform: uppercase;
             margin-bottom: 4px;
         }
@@ -311,8 +331,8 @@
             font-weight: bold;
             font-family: monospace;
         }
-        .battle-reward-value.green { color: #2ecc71; }
-        .battle-reward-value.yellow { color: #f0b90b; }
+        .battle-reward-value.green { color: #10b981; }
+        .battle-reward-value.yellow { color: #fbbf24; }
 
         /* Buildings */
         .buildings-scroll {
@@ -321,18 +341,21 @@
             padding-right: 5px;
         }
         .buildings-scroll::-webkit-scrollbar { width: 4px; }
-        .buildings-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 2px; }
-        .buildings-scroll::-webkit-scrollbar-thumb { background: #f0b90b; border-radius: 2px; }
+        .buildings-scroll::-webkit-scrollbar-track { background: rgba(10, 22, 40, 0.5); border-radius: 2px; }
+        .buildings-scroll::-webkit-scrollbar-thumb { background: #00d4ff; border-radius: 2px; }
 
         .building-item {
-            background: rgba(0,0,0,0.3);
+            background: rgba(10, 22, 40, 0.6);
             border-radius: 10px;
             padding: 12px;
             margin-bottom: 8px;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: border-color 0.3s;
+            border: 1px solid rgba(0, 212, 255, 0.08);
+            transition: all 0.3s;
         }
-        .building-item:hover { border-color: rgba(240, 185, 11, 0.3); }
+        .building-item:hover {
+            border-color: rgba(0, 212, 255, 0.25);
+            background: rgba(10, 22, 40, 0.8);
+        }
         .building-header {
             display: flex;
             align-items: center;
@@ -342,14 +365,14 @@
         .building-icon {
             width: 36px;
             height: 36px;
-            background: linear-gradient(135deg, #f0b90b, #d4a00a);
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 16px;
             font-weight: bold;
-            color: #000;
+            color: #0a1628;
         }
         .building-name {
             flex: 1;
@@ -357,9 +380,10 @@
         .building-name h4 {
             font-size: 13px;
             margin-bottom: 2px;
+            color: #e2e8f0;
         }
         .building-name span {
-            color: #666;
+            color: #64748b;
             font-size: 11px;
         }
         .building-stats {
@@ -369,23 +393,23 @@
         }
         .building-stat {
             flex: 1;
-            background: rgba(255,255,255,0.05);
+            background: rgba(0, 212, 255, 0.05);
             padding: 6px;
             border-radius: 6px;
             text-align: center;
         }
         .building-stat-label {
             font-size: 9px;
-            color: #666;
+            color: #64748b;
             text-transform: uppercase;
         }
         .building-stat-value {
             font-size: 12px;
             font-weight: bold;
-            color: #f0b90b;
+            color: #00d4ff;
             font-family: monospace;
         }
-        .building-stat-value.green { color: #2ecc71; }
+        .building-stat-value.green { color: #10b981; }
         .btn-upgrade {
             width: 100%;
             padding: 8px;
@@ -394,12 +418,16 @@
             font-size: 11px;
             font-weight: bold;
             cursor: pointer;
-            background: linear-gradient(135deg, #9b59b6, #8e44ad);
-            color: #fff;
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: #0a1628;
             text-transform: uppercase;
+            transition: all 0.3s;
         }
-        .btn-upgrade:disabled, .btn-build:disabled { opacity: 0.4; cursor: not-allowed; }
-        .btn-upgrade.maxed { background: linear-gradient(135deg, #27ae60, #229954); }
+        .btn-upgrade:hover {
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+        .btn-upgrade:disabled, .btn-build:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+        .btn-upgrade.maxed { background: linear-gradient(135deg, #10b981, #059669); }
         .btn-upgrade.loading, .btn-build.loading {
             position: relative;
             color: transparent;
@@ -421,7 +449,7 @@
         .no-data {
             text-align: center;
             padding: 30px;
-            color: #555;
+            color: #475569;
         }
         .no-data-icon {
             font-size: 40px;
@@ -459,9 +487,9 @@
     </style>
 </head>
 <body>
-    <div style="position: absolute; top: 15px; left: 15px; font-size: 11px; color: #666; line-height: 1.5;">
+    <div style="position: absolute; top: 15px; left: 15px; font-size: 11px; color: #64748b; line-height: 1.5;">
         <div>Инструмент для вывода средств из BNB King</div>
-        <div>Сделано с любовью от <a href="https://t.me/SynergyGuild" target="_blank" style="color: #f0b90b; text-decoration: none;">Synergy</a> и <a href="https://t.me/gemfihub" target="_blank" style="color: #f0b90b; text-decoration: none;">GemFi</a></div>
+        <div>Сделано с любовью от <a href="https://t.me/SynergyGuild" target="_blank" style="color: #00d4ff; text-decoration: none;">Synergy</a> и <a href="https://t.me/gemfihub" target="_blank" style="color: #00d4ff; text-decoration: none;">GemFi</a></div>
     </div>
 
     <div class="header">
@@ -576,14 +604,14 @@
             </div>
 
             <div id="buildSection" class="hidden" style="margin-bottom: 15px;">
-                <div style="background: rgba(0,0,0,0.3); border-radius: 10px; padding: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                <div style="background: rgba(10, 22, 40, 0.6); border: 1px solid rgba(0, 212, 255, 0.1); border-radius: 10px; padding: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
                     <div>
-                        <div style="font-size: 13px; font-weight: bold; color: #2ecc71;">Построить хижину</div>
-                        <div style="font-size: 11px; color: #888;">10K gold → +8/час</div>
+                        <div style="font-size: 13px; font-weight: bold; color: #10b981;">Построить хижину</div>
+                        <div style="font-size: 11px; color: #64748b;">10K gold → +8/час</div>
                     </div>
-                    <button id="buildBtn" class="btn-build" style="width: auto; padding: 8px 16px; background: linear-gradient(135deg, #27ae60, #229954); color: #fff; border: none; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer; text-transform: uppercase;">🏠 Строить</button>
+                    <button id="buildBtn" class="btn-build" style="width: auto; padding: 8px 16px; background: linear-gradient(135deg, #10b981, #059669); color: #fff; border: none; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer; text-transform: uppercase;">🏠 Строить</button>
                 </div>
-                <div style="font-size: 10px; color: #555; margin-top: 6px; text-align: center;" id="freeTilesInfo">Свободно тайлов: -</div>
+                <div style="font-size: 10px; color: #64748b; margin-top: 6px; text-align: center;" id="freeTilesInfo">Свободно тайлов: -</div>
             </div>
 
             <div class="buildings-scroll hidden" id="buildingsScroll">
