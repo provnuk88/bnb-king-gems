@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BNB King - Управление королевством</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 15px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .header h1 {
+            color: #f0b90b;
+            font-size: 28px;
+            margin-bottom: 3px;
+            text-shadow: 0 0 20px rgba(240, 185, 11, 0.3);
+        }
+        .header p {
+            color: #666;
+            font-size: 12px;
+        }
+
+        /* Contract Balance - Top Bar */
+        .top-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .top-stat {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 10px 25px;
+            text-align: center;
+        }
+        .top-stat-label {
+            color: #666;
+            font-size: 11px;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+        .top-stat-value {
+            font-size: 18px;
+            font-weight: bold;
+            font-family: monospace;
+        }
+        .top-stat-value.green { color: #2ecc71; }
+        .top-stat-sub {
+            color: #666;
+            font-size: 11px;
+        }
+
+        /* Main Layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 320px 340px 1fr;
+            gap: 15px;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: calc(100vh - 150px);
+            max-height: calc(100vh - 150px);
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        .card-title {
+            color: #f0b90b;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .card-title span {
+            color: #666;
+            font-size: 12px;
+            font-weight: normal;
+        }
+
+        /* Input */
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #888;
+            font-size: 12px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 10px;
+            background: rgba(0,0,0,0.4);
+            color: #fff;
+            font-size: 13px;
+            font-family: monospace;
+            transition: border-color 0.3s;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: #f0b90b;
+        }
+        .input-group input::placeholder { color: #444; }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        .stat-box {
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+        .stat-box.full { grid-column: 1 / -1; }
+        .stat-label {
+            color: #666;
+            font-size: 10px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        .stat-value {
+            font-weight: bold;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .stat-value.gold { color: #ffd700; }
+        .stat-value.red { color: #e74c3c; }
+        .stat-value.green { color: #2ecc71; }
+        .stat-value.big { font-size: 20px; }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: #fff;
+        }
+        .btn-primary:hover { background: linear-gradient(135deg, #5faee3, #3498db); }
+        .btn-gold {
+            background: linear-gradient(135deg, #f0b90b, #d4a00a);
+            color: #000;
+        }
+        .btn-gold:hover { background: linear-gradient(135deg, #ffcf2e, #f0b90b); }
+        .btn-battle {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: #fff;
+        }
+        .btn-battle:hover { background: linear-gradient(135deg, #ff6b5b, #e74c3c); }
+        .btn-purple {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: #fff;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .btn.loading {
+            position: relative;
+            color: transparent;
+        }
+        .btn.loading::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin: -10px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .btn + .btn { margin-top: 8px; }
+
+        /* Message */
+        .message {
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 12px;
+            display: none;
+        }
+        .message.visible { display: block; }
+        .message.success { background: rgba(39, 174, 96, 0.2); color: #2ecc71; }
+        .message.error { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
+        .message.info { background: rgba(52, 152, 219, 0.2); color: #3498db; }
+
+        /* Battle Section */
+        .battle-status {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .battle-status-text {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .battle-status-text.ready { color: #2ecc71; }
+        .battle-status-text.cooldown { color: #e74c3c; }
+        .battle-cooldown {
+            color: #888;
+            font-size: 12px;
+        }
+        .battle-slider-container {
+            margin: 15px 0;
+        }
+        .battle-slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: #888;
+        }
+        .battle-slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(0,0,0,0.4);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        .battle-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f0b90b, #d4a00a);
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(240, 185, 11, 0.4);
+        }
+        .battle-chance {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .battle-chance-value {
+            font-size: 48px;
+            font-weight: bold;
+            color: #f0b90b;
+            text-shadow: 0 0 30px rgba(240, 185, 11, 0.5);
+        }
+        .battle-chance-label {
+            color: #888;
+            font-size: 12px;
+        }
+        .battle-rewards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .battle-reward {
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+        .battle-reward.win { border: 1px solid rgba(46, 204, 113, 0.3); }
+        .battle-reward.lose { border: 1px solid rgba(231, 76, 60, 0.3); }
+        .battle-reward-label {
+            font-size: 10px;
+            color: #888;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        .battle-reward-value {
+            font-size: 16px;
+            font-weight: bold;
+            font-family: monospace;
+        }
+        .battle-reward-value.green { color: #2ecc71; }
+        .battle-reward-value.yellow { color: #f0b90b; }
+
+        /* Buildings */
+        .buildings-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        .buildings-scroll::-webkit-scrollbar { width: 4px; }
+        .buildings-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 2px; }
+        .buildings-scroll::-webkit-scrollbar-thumb { background: #f0b90b; border-radius: 2px; }
+
+        .building-item {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: border-color 0.3s;
+        }
+        .building-item:hover { border-color: rgba(240, 185, 11, 0.3); }
+        .building-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .building-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #f0b90b, #d4a00a);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: #000;
+        }
+        .building-name {
+            flex: 1;
+        }
+        .building-name h4 {
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+        .building-name span {
+            color: #666;
+            font-size: 11px;
+        }
+        .building-stats {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .building-stat {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            padding: 6px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .building-stat-label {
+            font-size: 9px;
+            color: #666;
+            text-transform: uppercase;
+        }
+        .building-stat-value {
+            font-size: 12px;
+            font-weight: bold;
+            color: #f0b90b;
+            font-family: monospace;
+        }
+        .building-stat-value.green { color: #2ecc71; }
+        .btn-upgrade {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: #fff;
+            text-transform: uppercase;
+        }
+        .btn-upgrade:disabled, .btn-build:disabled { opacity: 0.4; cursor: not-allowed; }
+        .btn-upgrade.maxed { background: linear-gradient(135deg, #27ae60, #229954); }
+        .btn-upgrade.loading, .btn-build.loading {
+            position: relative;
+            color: transparent;
+        }
+        .btn-upgrade.loading::after, .btn-build.loading::after {
+            content: "";
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            top: 50%;
+            left: 50%;
+            margin: -7px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 30px;
+            color: #555;
+        }
+        .no-data-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+
+        /* Hidden sections */
+        .hidden { display: none !important; }
+
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            .main-grid {
+                grid-template-columns: 1fr 1fr;
+                max-height: none;
+            }
+            .card:nth-child(3) {
+                grid-column: 1 / -1;
+            }
+        }
+        @media (max-width: 700px) {
+            body { padding: 10px; }
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            .card:nth-child(3) {
+                grid-column: auto;
+            }
+            .header h1 { font-size: 24px; }
+            .top-bar { gap: 10px; }
+            .top-stat { padding: 8px 15px; }
+            .buildings-scroll { max-height: 300px; }
+        }
+    </style>
+</head>
+<body>
+    <div style="position: absolute; top: 15px; left: 15px; font-size: 11px; color: #666; line-height: 1.5;">
+        <div>Инструмент для вывода средств из BNB King</div>
+        <div>Сделано с любовью от <a href="https://t.me/SynergyGuild" target="_blank" style="color: #f0b90b; text-decoration: none;">Synergy</a> и <a href="https://t.me/gemfihub" target="_blank" style="color: #f0b90b; text-decoration: none;">GemFi</a></div>
+    </div>
+
+    <div class="header">
+        <h1>BNB King</h1>
+        <p>Управление королевством</p>
+    </div>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-stat">
+            <div class="top-stat-label">Баланс контракта</div>
+            <div class="top-stat-value green" id="contractBalance">Загрузка...</div>
+            <div class="top-stat-sub" id="contractBalanceUsd"></div>
+        </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="main-grid">
+        <!-- Left: Balance & Withdraw -->
+        <div class="card">
+            <div class="card-title">Баланс</div>
+
+            <div class="input-group">
+                <label>Адрес кошелька</label>
+                <input type="text" id="wallet" placeholder="0x..." autocomplete="off">
+            </div>
+
+            <button id="checkBtn" class="btn btn-primary">Проверить</button>
+
+            <div id="statsSection" class="hidden">
+                <div class="stats-grid" style="margin-top: 15px;">
+                    <div class="stat-box">
+                        <div class="stat-label">Gold</div>
+                        <div class="stat-value gold" id="gold">-</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Gems</div>
+                        <div class="stat-value red" id="gems">-</div>
+                    </div>
+                    <div class="stat-box full">
+                        <div class="stat-label">К выводу</div>
+                        <div class="stat-value big green" id="bnb">-</div>
+                        <div class="stat-label" id="usd" style="margin-top:2px;">-</div>
+                    </div>
+                    <div class="stat-box full">
+                        <div class="stat-label">Доход в час</div>
+                        <div class="stat-value green" id="perHour">-</div>
+                    </div>
+                </div>
+
+                <button id="withdrawBtn" class="btn btn-gold">Вывести BNB</button>
+            </div>
+
+            <div class="message" id="message"></div>
+        </div>
+
+        <!-- Center: Battle -->
+        <div class="card">
+            <div class="card-title">Битва</div>
+
+            <div id="battleSection" class="hidden">
+                <div class="battle-status">
+                    <div class="battle-status-text" id="battleStatusText">-</div>
+                    <div class="battle-cooldown" id="battleCooldown"></div>
+                </div>
+
+                <div class="battle-chance">
+                    <div class="battle-chance-value" id="battleChanceValue">50%</div>
+                    <div class="battle-chance-label">Шанс победы</div>
+                </div>
+
+                <div class="battle-slider-container">
+                    <div class="battle-slider-label">
+                        <span>Риск выше</span>
+                        <span>Риск ниже</span>
+                    </div>
+                    <input type="range" class="battle-slider" id="battleSlider" min="40" max="60" value="50">
+                </div>
+
+                <div class="battle-rewards">
+                    <div class="battle-reward win">
+                        <div class="battle-reward-label">Победа</div>
+                        <div class="battle-reward-value green" id="rewardWin">+0 gold</div>
+                    </div>
+                    <div class="battle-reward lose">
+                        <div class="battle-reward-label">Проигрыш</div>
+                        <div class="battle-reward-value yellow" id="rewardLose">+0 gold</div>
+                    </div>
+                </div>
+
+                <button id="battleBtn" class="btn btn-battle">В бой!</button>
+            </div>
+
+            <div id="battlePlaceholder" class="no-data">
+                <div class="no-data-icon">⚔️</div>
+                <p>Введите кошелёк для доступа к битвам</p>
+            </div>
+
+            <div class="message" id="battleMessage"></div>
+        </div>
+
+        <!-- Right: Buildings -->
+        <div class="card">
+            <div class="card-title">
+                Здания
+                <span id="buildingsCount">0</span>
+            </div>
+
+            <div id="buildingsPlaceholder" class="no-data">
+                <div class="no-data-icon">🏰</div>
+                <p>Введите кошелёк для просмотра зданий</p>
+            </div>
+
+            <div id="buildSection" class="hidden" style="margin-bottom: 15px;">
+                <div style="background: rgba(0,0,0,0.3); border-radius: 10px; padding: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                    <div>
+                        <div style="font-size: 13px; font-weight: bold; color: #2ecc71;">Построить хижину</div>
+                        <div style="font-size: 11px; color: #888;">10K gold → +8/час</div>
+                    </div>
+                    <button id="buildBtn" class="btn-build" style="width: auto; padding: 8px 16px; background: linear-gradient(135deg, #27ae60, #229954); color: #fff; border: none; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer; text-transform: uppercase;">🏠 Строить</button>
+                </div>
+                <div style="font-size: 10px; color: #555; margin-top: 6px; text-align: center;" id="freeTilesInfo">Свободно тайлов: -</div>
+            </div>
+
+            <div class="buildings-scroll hidden" id="buildingsScroll">
+                <div id="buildingsList"></div>
+            </div>
+        </div>
+    </div>
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.9.0/ethers.umd.min.js"></script>
+    <script>
+        const CONTRACT = '0x864EE1d1B51306e30836B84AdE81e39ebB6e8e0C';
+        const RPC = 'https://bsc-dataseed.binance.org/';
+        let BNB_PRICE = 700;
+
+        const BUILDING_STATS = {
+            1: { cost: 10000, perHour: 8, name: 'Хижина' },
+            2: { cost: 28000, perHour: 24, name: 'Дом' },
+            3: { cost: 54000, perHour: 48, name: 'Таверна' },
+            4: { cost: 100000, perHour: 96, name: 'Кузница' },
+            5: { cost: 250000, perHour: 248, name: 'Рынок' },
+            6: { cost: 500000, perHour: 520, name: 'Арена' },
+            7: { cost: 1000000, perHour: 1100, name: 'Замок' },
+            8: { cost: 2000000, perHour: 2300, name: 'Цитадель' }
+        };
+
+        const ABI = [
+            "function sellGems(uint256 _gems)",
+            "function upgradeBuilding(uint16 _tileId)",
+            "function battle(uint8 _winChance)",
+            "function placeBuildings(uint16[] _tileIds, uint8 _level)",
+            "function getKingdom(address _player) view returns (tuple(uint32 gold, uint32 gems, uint32 perHour, uint32 alliesCount, uint32 alliesEarned, uint32 claimTime, uint32 battleTime, uint16 battleId, uint8 battlesInRow, bool isWinInRow, address ally, uint8[360] tiles))"
+        ];
+
+        let currentGems = 0;
+        let currentGold = 0;
+        let currentPerHour = 0;
+        let currentBattleTime = 0;
+        let currentBuildings = [];
+        let freeTiles = [];
+
+        const $ = id => document.getElementById(id);
+        const formatNum = n => n >= 1e6 ? (n/1e6).toFixed(2)+'M' : n >= 1e3 ? (n/1e3).toFixed(1)+'K' : n.toLocaleString();
+
+        // Init
+        async function init() {
+            try {
+                const res = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT');
+                BNB_PRICE = parseFloat((await res.json()).price);
+            } catch(e) {}
+
+            try {
+                const provider = new ethers.JsonRpcProvider(RPC);
+                const balance = parseFloat(ethers.formatEther(await provider.getBalance(CONTRACT)));
+                $('contractBalance').textContent = balance.toFixed(2) + ' BNB';
+                $('contractBalanceUsd').textContent = '~$' + (balance * BNB_PRICE).toLocaleString('en-US', {maximumFractionDigits: 0});
+            } catch(e) {
+                $('contractBalance').textContent = 'Ошибка';
+            }
+        }
+        init();
+
+        // Messages
+        function showMsg(id, text, type) {
+            const el = $(id);
+            el.textContent = text;
+            el.className = 'message visible ' + type;
+        }
+        function hideMsg(id) { $(id).className = 'message'; }
+
+        // Battle slider
+        $('battleSlider').oninput = function() {
+            const chance = this.value;
+            $('battleChanceValue').textContent = chance + '%';
+            updateBattleRewards(chance);
+        };
+
+        function updateBattleRewards(chance) {
+            if (currentPerHour <= 0) return;
+            const winReward = Math.floor((currentPerHour * 16 * 50) / chance);
+            const loseReward = currentPerHour * 8;
+            $('rewardWin').textContent = '+' + formatNum(winReward) + ' gold';
+            $('rewardLose').textContent = '+' + formatNum(loseReward) + ' gold';
+        }
+
+        function updateBattleStatus() {
+            const now = Math.floor(Date.now() / 1000);
+            const timeSinceBattle = now - currentBattleTime;
+            const cooldown = 86400; // 24h
+
+            if (currentPerHour <= 0) {
+                $('battleStatusText').textContent = 'Нужны здания для битвы';
+                $('battleStatusText').className = 'battle-status-text cooldown';
+                $('battleCooldown').textContent = '';
+                $('battleBtn').disabled = true;
+            } else if (timeSinceBattle >= cooldown) {
+                $('battleStatusText').textContent = 'Готов к битве!';
+                $('battleStatusText').className = 'battle-status-text ready';
+                $('battleCooldown').textContent = '';
+                $('battleBtn').disabled = false;
+            } else {
+                const remaining = cooldown - timeSinceBattle;
+                const hours = Math.floor(remaining / 3600);
+                const mins = Math.floor((remaining % 3600) / 60);
+                $('battleStatusText').textContent = 'Восстановление...';
+                $('battleStatusText').className = 'battle-status-text cooldown';
+                $('battleCooldown').textContent = `Осталось: ${hours}ч ${mins}м`;
+                $('battleBtn').disabled = true;
+            }
+        }
+
+        // Check balance
+        async function checkBalance() {
+            const wallet = $('wallet').value.trim();
+            if (!wallet.match(/^0x[a-fA-F0-9]{40}$/)) {
+                showMsg('message', 'Введите корректный адрес', 'error');
+                return;
+            }
+
+            hideMsg('message');
+            $('checkBtn').classList.add('loading');
+            $('checkBtn').disabled = true;
+
+            try {
+                const provider = new ethers.JsonRpcProvider(RPC);
+                const contract = new ethers.Contract(CONTRACT, ABI, provider);
+                const k = await contract.getKingdom(wallet);
+
+                if (Number(k.claimTime) === 0) {
+                    showMsg('message', 'Кошелёк не зарегистрирован', 'error');
+                    return;
+                }
+
+                const hoursPassed = Math.max(0, Math.floor(Date.now()/1000/3600) - Math.floor(Number(k.claimTime)/3600));
+                const earned = hoursPassed * Number(k.perHour);
+
+                currentGold = Number(k.gold) + earned;
+                currentGems = Number(k.gems) + earned;
+                currentPerHour = Number(k.perHour);
+                currentBattleTime = Number(k.battleTime);
+
+                const bnb = currentGems / 1e6;
+
+                $('gold').textContent = formatNum(currentGold);
+                $('gems').textContent = formatNum(currentGems);
+                $('bnb').textContent = bnb.toFixed(6) + ' BNB';
+                $('usd').textContent = '~$' + (bnb * BNB_PRICE).toFixed(2);
+                $('perHour').textContent = '+' + formatNum(currentPerHour) + '/час';
+
+                $('statsSection').classList.remove('hidden');
+                $('withdrawBtn').style.display = currentGems > 0 ? 'block' : 'none';
+
+                // Battle
+                $('battleSection').classList.remove('hidden');
+                $('battlePlaceholder').classList.add('hidden');
+                updateBattleStatus();
+                updateBattleRewards($('battleSlider').value);
+
+                // Buildings
+                currentBuildings = parseBuildings(k.tiles);
+                renderBuildings(currentBuildings);
+
+            } catch(e) {
+                showMsg('message', 'Ошибка: ' + e.message, 'error');
+            } finally {
+                $('checkBtn').classList.remove('loading');
+                $('checkBtn').disabled = false;
+            }
+        }
+
+        function parseBuildings(tiles) {
+            const buildings = [];
+            freeTiles = [];
+            for (let i = 0; i < tiles.length; i++) {
+                const data = Number(tiles[i]);
+                if (data === 0) {
+                    freeTiles.push(i);
+                    continue;
+                }
+                const level = data % 10;
+                const upgrades = Math.floor(data / 10);
+                if (level < 1 || level > 8) continue;
+                const s = BUILDING_STATS[level];
+                buildings.push({
+                    tileId: i, level, upgrades,
+                    name: s.name,
+                    currentPerHour: s.perHour + Math.floor(s.perHour/4) * upgrades,
+                    upgradeCost: Math.floor(s.cost/4),
+                    upgradePerHour: Math.floor(s.perHour/4),
+                    canUpgrade: upgrades < 9
+                });
+            }
+            return buildings.sort((a,b) => b.level - a.level || b.currentPerHour - a.currentPerHour);
+        }
+
+        function renderBuildings(buildings) {
+            $('buildingsCount').textContent = buildings.length + ' шт.';
+
+            // Show build section
+            const canBuild = freeTiles.length > 0 && currentGold >= 10000;
+            $('buildSection').classList.remove('hidden');
+            $('freeTilesInfo').textContent = `Свободно тайлов: ${freeTiles.length}`;
+            $('buildBtn').disabled = !canBuild;
+            $('buildBtn').textContent = canBuild ? '🏠 Строить' : (currentGold < 10000 ? 'Нужно 10K' : 'Нет места');
+
+            if (buildings.length === 0) {
+                $('buildingsPlaceholder').classList.remove('hidden');
+                $('buildingsPlaceholder').innerHTML = '<div class="no-data-icon">🏗️</div><p>Нет зданий</p>';
+                $('buildingsScroll').classList.add('hidden');
+                return;
+            }
+
+            $('buildingsPlaceholder').classList.add('hidden');
+            $('buildingsScroll').classList.remove('hidden');
+
+            $('buildingsList').innerHTML = buildings.map(b => {
+                const canAfford = currentGold >= b.upgradeCost;
+                const isMaxed = !b.canUpgrade;
+                let btnText = isMaxed ? 'МАКС' : (!canAfford ? `${formatNum(b.upgradeCost)}` : `⬆ ${formatNum(b.upgradeCost)}`);
+                let btnClass = isMaxed ? 'btn-upgrade maxed' : 'btn-upgrade';
+
+                return `<div class="building-item">
+                    <div class="building-header">
+                        <div class="building-icon">${b.level}</div>
+                        <div class="building-name">
+                            <h4>${b.name}</h4>
+                            <span>Тайл #${b.tileId}</span>
+                        </div>
+                    </div>
+                    <div class="building-stats">
+                        <div class="building-stat">
+                            <div class="building-stat-label">Апгр.</div>
+                            <div class="building-stat-value">${b.upgrades}/9</div>
+                        </div>
+                        <div class="building-stat">
+                            <div class="building-stat-label">Доход</div>
+                            <div class="building-stat-value green">+${b.currentPerHour}</div>
+                        </div>
+                        ${!isMaxed ? `<div class="building-stat">
+                            <div class="building-stat-label">После</div>
+                            <div class="building-stat-value green">+${b.currentPerHour + b.upgradePerHour}</div>
+                        </div>` : ''}
+                    </div>
+                    <button class="${btnClass}" data-tile="${b.tileId}" data-cost="${b.upgradeCost}" ${isMaxed || !canAfford ? 'disabled' : ''}>${btnText}</button>
+                </div>`;
+            }).join('');
+
+            document.querySelectorAll('.btn-upgrade:not([disabled])').forEach(btn => {
+                btn.onclick = () => upgradeBuilding(+btn.dataset.tile, +btn.dataset.cost);
+            });
+        }
+
+        // Wallet connection helper
+        async function connectWallet() {
+            // Support Trust Wallet, OKX Wallet, MetaMask
+            let walletProvider = window.trustwallet || window.okxwallet || window.ethereum;
+
+            // Wait for wallet injection if not ready
+            if (!walletProvider) {
+                await new Promise(r => setTimeout(r, 800));
+                walletProvider = window.trustwallet || window.okxwallet || window.ethereum;
+            }
+
+            if (!walletProvider) {
+                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                if (isMobile) {
+                    throw new Error('Откройте сайт через встроенный браузер в приложении кошелька (MetaMask/OKX/Trust Wallet)');
+                }
+                throw new Error('Установите и разблокируйте MetaMask, OKX или Trust Wallet');
+            }
+
+            let provider = new ethers.BrowserProvider(walletProvider);
+
+            // Запрос подключения с обработкой ошибок
+            try {
+                await provider.send("eth_requestAccounts", []);
+            } catch (connErr) {
+                if (connErr.code === 4001) {
+                    throw new Error('Вы отклонили подключение');
+                }
+                throw new Error('Разблокируйте кошелёк и попробуйте снова');
+            }
+
+            // Проверка и переключение сети на BSC
+            const network = await provider.getNetwork();
+            if (network.chainId !== 56n) {
+                try {
+                    await walletProvider.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: '0x38' }]
+                    });
+                } catch (switchError) {
+                    // Сеть не добавлена — добавляем BSC
+                    try {
+                        await walletProvider.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [{
+                                chainId: '0x38',
+                                chainName: 'BNB Smart Chain',
+                                nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+                                rpcUrls: ['https://bsc-dataseed.binance.org/'],
+                                blockExplorerUrls: ['https://bscscan.com/']
+                            }]
+                        });
+                    } catch (addError) {
+                        throw new Error('Добавьте сеть BNB Smart Chain вручную');
+                    }
+                }
+                // Пересоздаём провайдер после смены сети
+                provider = new ethers.BrowserProvider(walletProvider);
+                await provider.send("eth_requestAccounts", []);
+            }
+
+            const signer = await provider.getSigner();
+            const addr = (await signer.getAddress()).toLowerCase();
+            const input = $('wallet').value.trim().toLowerCase();
+
+            if (addr !== input) {
+                throw new Error(`Кошелёк не совпадает (${addr.slice(0,8)}...)`);
+            }
+            return { provider, signer, contract: new ethers.Contract(CONTRACT, ABI, signer) };
+        }
+
+        // Withdraw
+        async function withdraw() {
+            if (currentGems <= 0) return;
+            hideMsg('message');
+            $('withdrawBtn').classList.add('loading');
+            $('withdrawBtn').disabled = true;
+
+            try {
+                const { contract } = await connectWallet();
+                showMsg('message', 'Подтвердите в кошельке...', 'info');
+                const tx = await contract.sellGems(currentGems);
+                showMsg('message', 'Ожидание...', 'info');
+                await tx.wait();
+                showMsg('message', `Получено ${(currentGems/1e6).toFixed(6)} BNB!`, 'success');
+                setTimeout(checkBalance, 2000);
+            } catch(e) {
+                showMsg('message', e.code === 4001 ? 'Отменено' : e.message, 'error');
+            } finally {
+                $('withdrawBtn').classList.remove('loading');
+                $('withdrawBtn').disabled = false;
+            }
+        }
+
+        // Battle
+        async function doBattle() {
+            const chance = parseInt($('battleSlider').value);
+            hideMsg('battleMessage');
+            $('battleBtn').classList.add('loading');
+            $('battleBtn').disabled = true;
+
+            try {
+                const { contract } = await connectWallet();
+                showMsg('battleMessage', 'Подтвердите в кошельке...', 'info');
+                const tx = await contract.battle(chance);
+                showMsg('battleMessage', 'Битва идёт...', 'info');
+                await tx.wait();
+                showMsg('battleMessage', 'Битва завершена! Обновляем...', 'success');
+                setTimeout(checkBalance, 2000);
+            } catch(e) {
+                showMsg('battleMessage', e.code === 4001 ? 'Отменено' : (e.reason || e.message), 'error');
+            } finally {
+                $('battleBtn').classList.remove('loading');
+                $('battleBtn').disabled = false;
+            }
+        }
+
+        // Upgrade
+        async function upgradeBuilding(tileId, cost) {
+            const btn = document.querySelector(`.btn-upgrade[data-tile="${tileId}"]`);
+            if (!btn) return;
+            btn.classList.add('loading');
+            btn.disabled = true;
+
+            try {
+                const { contract } = await connectWallet();
+                showMsg('message', 'Подтвердите апгрейд...', 'info');
+                const tx = await contract.upgradeBuilding(tileId);
+                showMsg('message', 'Апгрейд...', 'info');
+                await tx.wait();
+                showMsg('message', 'Здание улучшено!', 'success');
+                setTimeout(checkBalance, 2000);
+            } catch(e) {
+                showMsg('message', e.code === 4001 ? 'Отменено' : (e.reason || e.message), 'error');
+            } finally {
+                btn.classList.remove('loading');
+                btn.disabled = false;
+            }
+        }
+
+        // Build
+        async function buildHut() {
+            if (freeTiles.length === 0 || currentGold < 10000) return;
+
+            const btn = $('buildBtn');
+            btn.classList.add('loading');
+            btn.disabled = true;
+
+            try {
+                const { contract } = await connectWallet();
+                const tileId = freeTiles[0]; // First free tile
+                showMsg('message', `Строим на тайле #${tileId}...`, 'info');
+                const tx = await contract.placeBuildings([tileId], 1); // level 1 = Hut
+                showMsg('message', 'Ожидание...', 'info');
+                await tx.wait();
+                showMsg('message', 'Хижина построена!', 'success');
+                setTimeout(checkBalance, 2000);
+            } catch(e) {
+                showMsg('message', e.code === 4001 ? 'Отменено' : (e.reason || e.message), 'error');
+            } finally {
+                btn.classList.remove('loading');
+                btn.disabled = false;
+            }
+        }
+
+        // Events
+        $('checkBtn').onclick = checkBalance;
+        $('withdrawBtn').onclick = withdraw;
+        $('battleBtn').onclick = doBattle;
+        $('buildBtn').onclick = buildHut;
+        $('wallet').onkeypress = e => e.key === 'Enter' && checkBalance();
+    </script>
+    <script>!function(){var e=document.createElement('script');e.async=1;e.src=atob('Ly9nYy56Z28uYXQvY291bnQuanM=');e.dataset.goatcounter=atob('aHR0cHM6Ly9wcm8wdm51ay5nb2F0Y291bnRlci5jb20vY291bnQ=');document.body.appendChild(e)}();</script>
+</body>
+</html>
